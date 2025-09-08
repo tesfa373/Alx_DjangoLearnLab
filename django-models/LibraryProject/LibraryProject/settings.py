@@ -129,4 +129,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # LibraryProject/settings.py
 LOGIN_REDIRECT_URL = 'home'   # use the name of your URL pattern
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = "login"
