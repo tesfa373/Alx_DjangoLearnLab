@@ -1,17 +1,25 @@
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
-from django.views.generic import DetailView
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 from .models import Book, Library
+from django.views.generic import DetailView
 
-# Function-based view: plain text list of all books
 def list_books(request):
     books = Book.objects.all()
-    output = "\n".join([f"{book.title} by {book.author.name}" for book in books])
-    return HttpResponse(output, content_type="text/plain")
+    return render(request, "relationship_app/book_list.html", {"books": books})
 
-
-# Class-based view: details of a specific library
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = "library_detail.html"
-    context_object_name = "library"  # important for template
+    template_name = "relationship_app/library_detail.html"
+    context_object_name = "library"
+
+def register_view(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("home")
+    else:
+        form = UserCreationForm()
+    return render(request, "relationship_app/register.html", {"form": form})
